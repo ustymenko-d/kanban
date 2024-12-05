@@ -14,7 +14,6 @@ const KanbanColumn: FC<KanbanColumnProps> = ({ id, cards, onEdit }) => {
 	const { setNodeRef } = useDroppable({
 		id,
 	})
-	console.log(cards)
 	return (
 		<div
 			ref={setNodeRef}

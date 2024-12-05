@@ -1,13 +1,6 @@
 import { ITimeCard, IUser } from '@/const/const.interfaces'
 
-type Theme = 'light' | 'dark'
-
 export interface AppState {
-	// Theme
-	theme: Theme
-	setTheme: (theme: Theme) => void
-	toggleTheme: () => void
-
 	// Modal
 	modalOpen: boolean
 	toggleModalOpen: () => void
@@ -23,6 +16,8 @@ export interface AppState {
 
 	// Cards
 	cards: ITimeCard[]
+	isCardEditing: boolean
+	updateIsCardEditing: (isEditing: boolean) => void
 	addCard: (card: ITimeCard) => void
 	editCard: (updatedCard: ITimeCard) => void
 	deleteCard: (cardId: string) => void

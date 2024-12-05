@@ -7,11 +7,6 @@
 	--foreground: #171717;
 }
 
-.dark {
-	--background: #0a0a0a;
-	--foreground: #ededed;
-}
-
 html,
 body {
 	min-height: 100lvh;
@@ -20,7 +15,4 @@ body {
 body {
 	color: var(--foreground);
 	background: var(--background);
-	/* background: rgba(240, 241, 251, 0); */
-
-	transition: color 0.2s, background 0.2s;
 }

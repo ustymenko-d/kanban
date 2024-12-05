@@ -1,4 +1,5 @@
 'use client'
+
 import { FC, useEffect, useRef, useState } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { ITimeCard } from '@/const/const.interfaces'
@@ -17,9 +18,9 @@ const TimeCard: FC<TimeCardProps> = ({ card, onEdit }) => {
 		y: number
 	}>({ x: 0, y: 0 })
 	const contextMenuRef = useRef<HTMLDivElement>(null)
-	const toggleDeleteModalOpen = useAppStore(
-		(state) => state.toggleDeleteModalOpen
-	)
+
+	const { toggleDeleteModalOpen, updateIsCardEditing } = useAppStore()
+
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
 		id: card.id,
 	})
@@ -31,22 +32,6 @@ const TimeCard: FC<TimeCardProps> = ({ card, onEdit }) => {
 			y: event.clientY,
 		})
 		setShowContextMenu(true)
-	}
-
-	const handleEdit = () => {
-		onEdit(card)
-		setShowContextMenu(false)
-	}
-
-	const handleDelete = () => {
-		toggleDeleteModalOpen(card)
-		setShowContextMenu(false)
-	}
-
-	const style = {
-		transform: transform
-			? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-			: undefined,
 	}
 
 	useEffect(() => {
@@ -66,6 +51,28 @@ const TimeCard: FC<TimeCardProps> = ({ card, onEdit }) => {
 		}
 	}, [])
 
+	const handleViewDetails = () => {
+		onEdit(card)
+		setShowContextMenu(false)
+	}
+
+	const handleEdit = () => {
+		updateIsCardEditing(true)
+		onEdit(card)
+		setShowContextMenu(false)
+	}
+
+	const handleDelete = () => {
+		toggleDeleteModalOpen(card)
+		setShowContextMenu(false)
+	}
+
+	const style = {
+		transform: transform
+			? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+			: undefined,
+	}
+
 	return (
 		<>
 			<div
@@ -84,6 +91,7 @@ const TimeCard: FC<TimeCardProps> = ({ card, onEdit }) => {
 				<ContextMenu
 					contextMenuRef={contextMenuRef}
 					contextMenuPosition={contextMenuPosition}
+					handleViewDetails={handleViewDetails}
 					handleEdit={handleEdit}
 					handleDelete={handleDelete}
 				/>

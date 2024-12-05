@@ -8,14 +8,6 @@ export const useAppStore = create<AppState>()(
 	devtools(
 		persist(
 			(set) => ({
-				// Theme
-				theme: 'light',
-				setTheme: (theme) => set({ theme }),
-				toggleTheme: () =>
-					set((state) => ({
-						theme: state.theme === 'light' ? 'dark' : 'light',
-					})),
-
 				// Modal
 				modalOpen: false,
 				toggleModalOpen: () =>
@@ -46,6 +38,8 @@ export const useAppStore = create<AppState>()(
 							},
 						],
 					})),
+				isCardEditing: false,
+				updateIsCardEditing: (isEditing) => set({ isCardEditing: isEditing }),
 				editCard: (updatedCard) =>
 					set((state) => ({
 						cards: state.cards.map((card) =>

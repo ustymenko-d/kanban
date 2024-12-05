@@ -9,7 +9,8 @@ import KanbanHead from '../KanbanHead/KanbanHead'
 import { ITimeCard } from '@/const/const.interfaces'
 
 const KanbanBoard: FC = () => {
-	const { users, cards, editCard, toggleModalOpen } = useAppStore()
+	const { users, cards, editCard, toggleModalOpen, updateIsCardEditing } =
+		useAppStore()
 
 	const [isHydrated, setIsHydrated] = useState<boolean>(false)
 
@@ -32,12 +33,15 @@ const KanbanBoard: FC = () => {
 		const overId = over.id as string
 		const [overUserId, overDate] = overId.split(':')
 
-		editCard({
-			id: active.id as string,
-			userId: overUserId,
-			date: overDate,
-			time: cards.find((card) => card.id === active.id)?.time || '',
-		})
+		const cardToUpdate = cards.find((card) => card.id === active.id)
+
+		if (cardToUpdate) {
+			editCard({
+				...cardToUpdate,
+				userId: overUserId,
+				date: overDate,
+			})
+		}
 	}
 
 	const handlePreviousWeek = (): void => {
@@ -66,8 +70,14 @@ const KanbanBoard: FC = () => {
 	)
 
 	const onEdit = (card: ITimeCard) => {
-		useAppStore.getState().setEditCardData(card)
-		useAppStore.getState().toggleModalOpen()
+		const { setEditCardData, toggleModalOpen } = useAppStore.getState()
+		setEditCardData(card)
+		toggleModalOpen()
+	}
+
+	const handleCreateTask = (): void => {
+		updateIsCardEditing(true)
+		toggleModalOpen()
 	}
 
 	useEffect(() => {
@@ -83,7 +93,7 @@ const KanbanBoard: FC = () => {
 			<div className='flex items-center gap-4 mb-4'>
 				<button onClick={handlePreviousWeek}>← Previous Week</button>
 				<button onClick={handleNextWeek}>Next Week →</button>
-				<button onClick={() => toggleModalOpen()}>Create Task</button>
+				<button onClick={handleCreateTask}>Create Task</button>
 			</div>
 
 			<div
