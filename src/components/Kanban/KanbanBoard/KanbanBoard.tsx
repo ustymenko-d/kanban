@@ -9,7 +9,7 @@ import KanbanHead from '../KanbanHead/KanbanHead'
 import { ITimeCard } from '@/const/const.interfaces'
 
 const KanbanBoard: FC = () => {
-	const { users, cards, editCard, deleteCard, toggleModalOpen } = useAppStore()
+	const { users, cards, editCard, toggleModalOpen } = useAppStore()
 
 	const [isHydrated, setIsHydrated] = useState<boolean>(false)
 
@@ -65,17 +65,17 @@ const KanbanBoard: FC = () => {
 			cards.filter((card) => card.date === format(date, 'yyyy-MM-dd')).length
 	)
 
+	const onEdit = (card: ITimeCard) => {
+		useAppStore.getState().setEditCardData(card)
+		useAppStore.getState().toggleModalOpen()
+	}
+
 	useEffect(() => {
 		setIsHydrated(true)
 	}, [])
 
 	if (!isHydrated) {
-		return null
-	}
-
-	const onEdit = (card: ITimeCard) => {
-		useAppStore.getState().setEditCardData(card)
-		useAppStore.getState().toggleModalOpen()
+		return <div>Loading...</div>
 	}
 
 	return (
@@ -141,7 +141,6 @@ const KanbanBoard: FC = () => {
 											card.date === format(date, 'yyyy-MM-dd')
 									)}
 									onEdit={onEdit}
-									onDelete={(cardId) => deleteCard(cardId)}
 								/>
 							))}
 						</div>

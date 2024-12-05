@@ -7,14 +7,12 @@ import { format } from 'date-fns'
 import ReactFocusLock from 'react-focus-lock'
 
 const Modal: FC = () => {
-	// const { modalOpen, toggleModalOpen, addCard, users } = useAppStore()
 	const {
 		modalOpen,
 		toggleModalOpen,
 		addCard,
 		editCard,
 		editCardData,
-		// setEditCardData,
 		clearEditCardData,
 		users,
 	} = useAppStore()
@@ -36,17 +34,6 @@ const Modal: FC = () => {
 		toggleModalOpen()
 		clearEditCardData()
 	}
-
-	// const handleAddTask = (): void => {
-	// 	const newCard = {
-	// 		id: uuidv4(),
-	// 		time: selectedTime,
-	// 		date: selectedDate,
-	// 		userId: selectedUser,
-	// 	}
-	// 	addCard(newCard)
-	// 	toggleModalOpen()
-	// }
 
 	const handleSave = (): void => {
 		if (editCardData) {

@@ -3,21 +3,23 @@ import { FC, useEffect, useRef, useState } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { ITimeCard } from '@/const/const.interfaces'
 import ContextMenu from './components/ContextMenu'
+import { useAppStore } from '@/store/store'
 
 interface TimeCardProps {
 	card: ITimeCard
 	onEdit: (card: ITimeCard) => void
-	onDelete: (cardId: string) => void
 }
 
-const TimeCard: FC<TimeCardProps> = ({ card, onEdit, onDelete }) => {
+const TimeCard: FC<TimeCardProps> = ({ card, onEdit }) => {
 	const [showContextMenu, setShowContextMenu] = useState<boolean>(false)
 	const [contextMenuPosition, setContextMenuPosition] = useState<{
 		x: number
 		y: number
 	}>({ x: 0, y: 0 })
 	const contextMenuRef = useRef<HTMLDivElement>(null)
-
+	const toggleDeleteModalOpen = useAppStore(
+		(state) => state.toggleDeleteModalOpen
+	)
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
 		id: card.id,
 	})
@@ -37,9 +39,7 @@ const TimeCard: FC<TimeCardProps> = ({ card, onEdit, onDelete }) => {
 	}
 
 	const handleDelete = () => {
-		const cardId = card.id as string
-
-		onDelete(cardId)
+		toggleDeleteModalOpen(card)
 		setShowContextMenu(false)
 	}
 

@@ -8,9 +8,33 @@ export const useAppStore = create<AppState>()(
 	devtools(
 		persist(
 			(set) => ({
+				// Theme
+				theme: 'light',
+				setTheme: (theme) => set({ theme }),
+				toggleTheme: () =>
+					set((state) => ({
+						theme: state.theme === 'light' ? 'dark' : 'light',
+					})),
+
+				// Modal
+				modalOpen: false,
+				toggleModalOpen: () =>
+					set((state) => ({ modalOpen: !state.modalOpen })),
+
+				deleteModalOpen: false,
+				deleteCardData: null,
+				toggleDeleteModalOpen: (card = null) =>
+					set((state) => ({
+						deleteModalOpen: !state.deleteModalOpen,
+						deleteCardData: card,
+					})),
+				clearDeleteCardData: () => set({ deleteCardData: null }),
+
+				// Users
 				users: initialData.users,
 				setUsers: (users) => set({ users }),
 
+				// Cards
 				cards: initialData.cards,
 				addCard: (card) =>
 					set((state) => ({
@@ -33,23 +57,21 @@ export const useAppStore = create<AppState>()(
 						cards: state.cards.filter((card) => card.id !== cardId),
 					})),
 
+				// Edit card data
 				editCardData: null,
 				setEditCardData: (card) => set({ editCardData: card }),
 				clearEditCardData: () => set({ editCardData: null }),
-
-				theme: 'light',
-				setTheme: (theme) => set({ theme }),
-				toggleTheme: () =>
-					set((state) => ({
-						theme: state.theme === 'light' ? 'dark' : 'light',
-					})),
-
-				modalOpen: false,
-				toggleModalOpen: () =>
-					set((state) => ({ modalOpen: !state.modalOpen })),
 			}),
 			{
 				name: 'appStateStorage',
+				onRehydrateStorage: () => (state, error) => {
+					if (error) {
+						console.error('Failed to rehydrate Zustand state', error)
+					}
+					if (!state?.cards?.length || !state?.users?.length) {
+						set({ cards: initialData.cards, users: initialData.users })
+					}
+				},
 			}
 		)
 	)

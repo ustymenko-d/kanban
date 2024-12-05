@@ -1,3 +1,4 @@
+'use client'
 import { FC } from 'react'
 import { useDroppable } from '@dnd-kit/core'
 import { ITimeCard } from '@/const/const.interfaces'
@@ -7,19 +8,13 @@ interface KanbanColumnProps {
 	id: string
 	cards: ITimeCard[]
 	onEdit: (card: ITimeCard) => void
-	onDelete: (cardId: string) => void
 }
 
-const KanbanColumn: FC<KanbanColumnProps> = ({
-	id,
-	cards,
-	onEdit,
-	onDelete,
-}) => {
+const KanbanColumn: FC<KanbanColumnProps> = ({ id, cards, onEdit }) => {
 	const { setNodeRef } = useDroppable({
 		id,
 	})
-
+	console.log(cards)
 	return (
 		<div
 			ref={setNodeRef}
@@ -29,7 +24,6 @@ const KanbanColumn: FC<KanbanColumnProps> = ({
 					key={card.id}
 					card={card}
 					onEdit={onEdit}
-					onDelete={onDelete}
 				/>
 			))}
 		</div>
