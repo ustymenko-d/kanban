@@ -1,20 +1,24 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { DndContext, DragEndEvent } from '@dnd-kit/core'
 import { addDays, format, startOfWeek, subDays } from 'date-fns'
-import { InitialData, ITimeCard } from '@/const/const.interfaces'
 import { useAppStore } from '@/store/store'
-import { initialData } from '@/const/const'
 import KanbanColumn from '../KanbanColumn/KanbanColumn'
 import KanbanHead from '../KanbanHead/KanbanHead'
+import { ITimeCard } from '@/const/const.interfaces'
 
 const KanbanBoard: FC = () => {
-	const { toggleModalOpen } = useAppStore()
-	const [data, setData] = useState<InitialData>(initialData)
+	const { users, cards, editCard, deleteCard, toggleModalOpen } = useAppStore()
+
+	const [isHydrated, setIsHydrated] = useState<boolean>(false)
+
 	const [currentWeekStart, setCurrentWeekStart] = useState<Date>(
 		startOfWeek(new Date(), { weekStartsOn: 1 })
 	)
+
+	const [showOnlyUsersWithTasks, setShowOnlyUsersWithTasks] =
+		useState<boolean>(false)
 
 	const currentWeekDates = Array.from({ length: 7 }, (_, i) =>
 		addDays(currentWeekStart, i)
@@ -28,18 +32,11 @@ const KanbanBoard: FC = () => {
 		const overId = over.id as string
 		const [overUserId, overDate] = overId.split(':')
 
-		setData((prev) => {
-			const cardIndex = prev.cards.findIndex((c) => c.id === active.id)
-			if (cardIndex === -1) return prev
-
-			const updatedCards = [...prev.cards]
-			updatedCards[cardIndex] = {
-				...updatedCards[cardIndex],
-				userId: overUserId,
-				date: overDate,
-			}
-
-			return { ...prev, cards: updatedCards }
+		editCard({
+			id: active.id as string,
+			userId: overUserId,
+			date: overDate,
+			time: cards.find((card) => card.id === active.id)?.time || '',
 		})
 	}
 
@@ -51,34 +48,82 @@ const KanbanBoard: FC = () => {
 		setCurrentWeekStart((prev) => addDays(prev, 7))
 	}
 
-	const handleEditCard = (card: ITimeCard): void => {
-		console.log('Edit card:', card)
-		toggleModalOpen()
+	const filteredUsers = showOnlyUsersWithTasks
+		? users.filter((user) =>
+				cards.some((card) =>
+					currentWeekDates.some(
+						(date) =>
+							card.userId === user.id &&
+							card.date === format(date, 'yyyy-MM-dd')
+					)
+				)
+		  )
+		: users
+
+	const tasksPerDay = currentWeekDates.map(
+		(date) =>
+			cards.filter((card) => card.date === format(date, 'yyyy-MM-dd')).length
+	)
+
+	useEffect(() => {
+		setIsHydrated(true)
+	}, [])
+
+	if (!isHydrated) {
+		return null
 	}
 
-	const handleDeleteCard = (cardId: string): void => {
-		setData((prev) => {
-			const updatedCards = prev.cards.filter((card) => card.id !== cardId)
-			return { ...prev, cards: updatedCards }
-		})
+	const onEdit = (card: ITimeCard) => {
+		useAppStore.getState().setEditCardData(card)
+		useAppStore.getState().toggleModalOpen()
 	}
 
 	return (
 		<>
-			<div className='flex items-center gap-4'>
-				<button onClick={handlePreviousWeek}>← prew</button>
-				<button onClick={handleNextWeek}>next →</button>
+			<div className='flex items-center gap-4 mb-4'>
+				<button onClick={handlePreviousWeek}>← Previous Week</button>
+				<button onClick={handleNextWeek}>Next Week →</button>
+				<button onClick={() => toggleModalOpen()}>Create Task</button>
 			</div>
-
-			<button onClick={() => toggleModalOpen()}>create</button>
 
 			<div
 				className='grid'
 				style={{ gridTemplateRows: 'auto' }}>
 				<KanbanHead dates={currentWeekDates} />
 
+				<div
+					className='grid task-count-row'
+					style={{
+						gridTemplateColumns: '100px repeat(7, 1fr)',
+						fontWeight: 'bold',
+					}}>
+					<div>
+						<label className='flex items-center gap-2 cursor-pointer'>
+							<input
+								type='checkbox'
+								checked={showOnlyUsersWithTasks}
+								onChange={() => setShowOnlyUsersWithTasks((prev) => !prev)}
+								className='hidden'
+							/>
+							<span
+								className={`toggle-switch ${
+									showOnlyUsersWithTasks ? 'bg-blue-500' : 'bg-gray-300'
+								}`}
+							/>
+							<span>Filter</span>
+						</label>
+					</div>
+					{tasksPerDay.map((count, index) => (
+						<div
+							key={index}
+							className='text-center'>
+							{count}
+						</div>
+					))}
+				</div>
+
 				<DndContext onDragEnd={handleDragEnd}>
-					{data.users.map((user) => (
+					{filteredUsers.map((user) => (
 						<div
 							key={user.id}
 							className='grid'
@@ -86,18 +131,17 @@ const KanbanBoard: FC = () => {
 							<div>
 								<strong>{user.name}</strong>
 							</div>
-
 							{currentWeekDates.map((date) => (
 								<KanbanColumn
 									key={`${user.id}:${format(date, 'yyyy-MM-dd')}`}
 									id={`${user.id}:${format(date, 'yyyy-MM-dd')}`}
-									cards={data.cards.filter(
+									cards={cards.filter(
 										(card) =>
 											card.userId === user.id &&
 											card.date === format(date, 'yyyy-MM-dd')
 									)}
-									onEdit={handleEditCard}
-									onDelete={handleDeleteCard}
+									onEdit={onEdit}
+									onDelete={(cardId) => deleteCard(cardId)}
 								/>
 							))}
 						</div>

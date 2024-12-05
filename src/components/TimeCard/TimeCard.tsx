@@ -2,6 +2,7 @@
 import { FC, useEffect, useRef, useState } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { ITimeCard } from '@/const/const.interfaces'
+import ContextMenu from './components/ContextMenu'
 
 interface TimeCardProps {
 	card: ITimeCard
@@ -11,7 +12,10 @@ interface TimeCardProps {
 
 const TimeCard: FC<TimeCardProps> = ({ card, onEdit, onDelete }) => {
 	const [showContextMenu, setShowContextMenu] = useState<boolean>(false)
-	const [contextMenuPosition, setContextMenuPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 })
+	const [contextMenuPosition, setContextMenuPosition] = useState<{
+		x: number
+		y: number
+	}>({ x: 0, y: 0 })
 	const contextMenuRef = useRef<HTMLDivElement>(null)
 
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -77,23 +81,12 @@ const TimeCard: FC<TimeCardProps> = ({ card, onEdit, onDelete }) => {
 			</div>
 
 			{showContextMenu && (
-				<div
-					ref={contextMenuRef}
-					className='bg-white shadow-md rounded z-30'
-					style={{
-						position: 'absolute',
-						top: `${contextMenuPosition.y}px`,
-						left: `${contextMenuPosition.x}px`,
-					}}>
-					<ul className='list-none m-0 p-0'>
-						<li className='px-4 py-2 cursor-pointer hover:bg-slate-300 dark:text-cyan-950'>
-							<button onClick={handleEdit}>edit</button>
-						</li>
-						<li className='px-4 py-2 cursor-pointer hover:bg-slate-300 dark:text-cyan-950'>
-							<button onClick={handleDelete}>delete</button>
-						</li>
-					</ul>
-				</div>
+				<ContextMenu
+					contextMenuRef={contextMenuRef}
+					contextMenuPosition={contextMenuPosition}
+					handleEdit={handleEdit}
+					handleDelete={handleDelete}
+				/>
 			)}
 		</>
 	)
