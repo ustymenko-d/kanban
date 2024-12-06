@@ -1,13 +1,14 @@
 'use client'
 
 import { FC, useEffect, useState } from 'react'
-import { useAppStore } from '@/store/store'
 import { v4 as uuidv4 } from 'uuid'
 import { format } from 'date-fns'
 import ReactFocusLock from 'react-focus-lock'
+import { useAppStore } from '@/store/store'
 import { ITimeCard, TCardStatus, TCardTag } from '@/const/const.interfaces'
-import ModalForm from './components/ModalForm/ModalForm'
 import ModalDetails from './components/ModalDetails/ModalDetails'
+import ModalForm from './components/ModalForm/ModalForm'
+import { IoCloseOutline } from 'react-icons/io5'
 
 export interface FormData {
 	userId: string | number
@@ -62,10 +63,14 @@ const Modal: FC = () => {
 
 	const [timeError, setTimeError] = useState<string>('')
 
+	const handleCancel = () => {
+		updateIsCardEditing(false)
+	}
+
 	const handleClose = (): void => {
 		toggleModalOpen()
 		clearEditCardData()
-		updateIsCardEditing(false)
+		handleCancel()
 	}
 
 	const handleEdit = () => {
@@ -127,57 +132,79 @@ const Modal: FC = () => {
 	return modalOpen ? (
 		<div className='z-40 fixed inset-0 w-screen h-screen flex justify-end'>
 			<div
-				className='h-full w-full absolute bg-black bg-opacity-30'
+				className='h-full w-full absolute bg-black bg-opacity-40'
 				onClick={handleClose}></div>
 
 			<ReactFocusLock
 				returnFocus
 				disabled={!modalOpen}>
 				<div
-					className='relative z-50 h-full bg-white dark:bg-teal-950 p-4'
+					className='overflow-hidden relative z-50 h-full min-w-96 flex flex-col bg-white shadow-lg'
 					onKeyDown={(e) => {
 						if (e.code === 'Escape') handleClose()
 					}}
 					role='dialog'
 					aria-modal='true'>
-					<h2 className='text-lg font-semibold mb-4'>
-						{editCardData ? 'Edit Task' : 'Add New Task'}
-					</h2>
-
-					{isEditing && (
-						<ModalForm
-							users={users}
-							timeError={timeError}
-							setTimeError={setTimeError}
-							cardData={cardData}
-							setCardData={setCardData}
-						/>
-					)}
-
-					{!isEditing && editCardData && (
-						<ModalDetails editCardData={editCardData} users={users} />
-					)}
-
-					{editCardData && !isEditing ? (
+					<div className='p-5 flex items-center gap-4 border-b'>
 						<button
-							className='bg-yellow-500 text-white px-4 py-2 rounded mb-4'
-							onClick={handleEdit}>
-							Edit Task
+							className='cursor-pointer w-6 h-6 text-slate-400 hover:text-slate-500 focus-visible:text-slate-500 active:text-slate-600'
+							onClick={handleClose}>
+							<IoCloseOutline className='w-full h-full duration-200' />
 						</button>
-					) : (
-						<div className='flex justify-end'>
+						<h2 className='text-2xl font-semibold'>
+							{editCardData && isEditing
+								? 'Edit Task'
+								: editCardData && !isEditing
+								? 'Task details'
+								: 'Add New Task'}
+						</h2>
+					</div>
+					<div className='overflow-auto mb-20 p-5 flex-grow flex flex-col gap-4'>
+						{isEditing && (
+							<ModalForm
+								users={users}
+								timeError={timeError}
+								setTimeError={setTimeError}
+								cardData={cardData}
+								setCardData={setCardData}
+							/>
+						)}
+
+						{!isEditing && editCardData && (
+							<ModalDetails
+								editCardData={editCardData}
+								users={users}
+							/>
+						)}
+					</div>
+					<div className='absolute bottom-0 w-full p-5 bg-white shadow-2xl'>
+						{editCardData && !isEditing ? (
 							<button
-								onClick={handleClose}
-								className='bg-red-500 text-white px-4 py-2 rounded'>
-								Cancel
+								className='px-4 py-2 w-full rounded text-white bg-yellow-500 hover:bg-yellow-600 focus-visible:bg-yellow-600 active:bg-yellow-700 duration-200'
+								onClick={handleEdit}>
+								Edit Task
 							</button>
-							<button
-								onClick={handleSave}
-								className='bg-blue-500 text-white px-4 py-2 rounded'>
-								{editCardData ? 'Save Changes' : 'Add Task'}
-							</button>
-						</div>
-					)}
+						) : (
+							<div className='grid grid-cols-2 gap-4'>
+								<button
+									onClick={() => {
+										if (editCardData) {
+											handleCancel()
+										} else {
+											handleClose()
+										}
+									}}
+									className='px-4 py-2 rounded text-white bg-red-500 hover:bg-red-600 focus-visible:bg-red-600 active:bg-red-700 duration-200'>
+									Cancel
+								</button>
+								<button
+									onClick={handleSave}
+									className='px-4 py-2 rounded text-white bg-emerald-500 hover:bg-emerald-600 focus-visible:bg-emerald-600 active:bg-emerald-700 duration-200'>
+									{editCardData ? 'Save Changes' : 'Add Task'}
+								</button>
+							</div>
+						)}
+					</div>
 				</div>
 			</ReactFocusLock>
 		</div>

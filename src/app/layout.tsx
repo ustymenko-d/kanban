@@ -20,8 +20,8 @@ export default function RootLayout({
 	return (
 		<html
 			lang='en'
-			className={`${inter.className} overflow-x-clip`}>
-			<body>{children}</body>
+			className={`${inter.className} overflow-hidden w-screen bg-slate-200`}>
+			<body className='h-screen bg-slate-200 w-screen'>{children}</body>
 		</html>
 	)
 }

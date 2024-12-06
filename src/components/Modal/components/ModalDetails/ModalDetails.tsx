@@ -11,7 +11,7 @@ const DetailItem: FC<{ label: string; value: string | number | undefined }> = ({
 	label,
 	value,
 }) => (
-	<div className='mt-2'>
+	<div className='flex flex-col gap-1'>
 		<strong>{label}:</strong>
 		<p>{value || 'N/A'}</p>
 	</div>

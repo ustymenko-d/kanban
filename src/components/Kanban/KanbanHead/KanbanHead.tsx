@@ -1,26 +1,108 @@
 import { FC } from 'react'
 import { format } from 'date-fns'
+import ToggleSwitch from '@/components/UI/Toggler/Toggler'
+import { FaRegUser } from 'react-icons/fa'
 
 interface KanbanHeadProps {
 	dates: Date[]
+	currentWeekDates: Date[]
+	showOnlyUsersWithTasks: boolean
+	setShowOnlyUsersWithTasks: (value: boolean) => void
+	cards: { date: string }[]
 }
 
-const KanbanHead: FC<KanbanHeadProps> = ({ dates }) => {
-	return (
-		<div
-			className='grid'
-			style={{ gridTemplateColumns: '100px repeat(7, 1fr)' }}>
-			<div className='p-2 bg-slate-300 border-e	border-yellow-300'></div>
+const KanbanHead: FC<KanbanHeadProps> = ({
+	cards,
+	dates,
+	currentWeekDates,
+	showOnlyUsersWithTasks,
+	setShowOnlyUsersWithTasks,
+}) => {
+	const tasksPerDay = currentWeekDates.map(
+		(date) =>
+			cards.filter((card) => card.date === format(date, 'yyyy-MM-dd')).length
+	)
 
-			{dates.map((date) => (
-				<div
-					key={date.toISOString()}
-					className='p-2 bg-neutral-500'>
-					<div>{format(date, 'EEEE')}</div>{' '}
-					<div>{format(date, 'dd.MM.yyyy')}</div>
+	return (
+		<>
+			<div
+				className='grid'
+				style={{
+					gridTemplateColumns: '250px repeat(7, minmax(200px, 1fr)) 250px',
+				}}>
+				<div className='p-4 border-t border-e bg-slate-100 border-slate-300'></div>
+
+				{dates.map((date) => (
+					<div
+						key={date.toISOString()}
+						className='p-4 font-bold text-center border-t border-e bg-slate-100 border-slate-300 last:rounded-tr-lg hover:bg-slate-300'>
+						<span>{format(date, 'EE')}</span> <span>{format(date, 'dd')}</span>
+					</div>
+				))}
+			</div>
+
+			<div
+				className='grid'
+				style={{
+					gridTemplateColumns: '250px repeat(7, minmax(200px, 1fr)) 250px',
+				}}>
+				<div className='p-2 border-t border-e border-slate-300 bg-emerald-50'>
+					<label className='flex items-center gap-2 cursor-pointer'>
+						<input
+							type='checkbox'
+							checked={showOnlyUsersWithTasks}
+							onChange={() =>
+								setShowOnlyUsersWithTasks(!showOnlyUsersWithTasks)
+							}
+							className='hidden'
+						/>
+						<span>Shifts disponibles</span>
+						<ToggleSwitch
+							active={showOnlyUsersWithTasks}
+							additionalClasses='pointer-events-none'
+						/>
+					</label>
 				</div>
-			))}
-		</div>
+				{tasksPerDay.map((count, index) => (
+					<div
+						key={index}
+						className='p-2 flex justify-center items-center border-t border-e text-center border-slate-300 bg-emerald-50'>
+						<span className='block py-1 px-4 w-fit rounded-md text-xs bg-black bg-opacity-15'>
+							{count}
+						</span>
+					</div>
+				))}
+
+				<div className='border-t border-slate-300'></div>
+			</div>
+
+			<div
+				className='grid'
+				style={{
+					gridTemplateColumns: '250px repeat(7, minmax(200px, 1fr)) 250px',
+				}}>
+				{Array.from({ length: 8 }).map((_, index) => (
+					<div
+						key={index}
+						className=' p-2 border-t border-e border-gray-300 flex flex-wrap gap-2 items-center justify-center bg-orange-200 first:justify-start'>
+						{index % 2 === 0 && (
+							<div className='p-1 text-xs rounded-md text-white bg-orange-600 bg-opacity-75 hover:bg-opacity-85'>
+								35h30/45h
+							</div>
+						)}
+						{(index === 1 || index === 3) && (
+							<div className='text-xs flex items-center gap-1 order-1'>
+								<FaRegUser /> 4
+							</div>
+						)}
+						<div className='p-1 text-xs rounded-md text-white bg-black bg-opacity-15 hover:bg-opacity-30'>
+							196&euro;
+						</div>
+					</div>
+				))}
+				<div className='p-2 text-center font-bold bg-slate-300'>Compteurs</div>
+			</div>
+		</>
 	)
 }
 

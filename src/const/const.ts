@@ -45,6 +45,7 @@ const generateCards = (): ITimeCard[] => [
 		status: 'approve',
 		price: 75,
 		note: 'Lorem',
+		tag: 'Caisse',
 		userId: users[0].id,
 	},
 	{
@@ -55,6 +56,7 @@ const generateCards = (): ITimeCard[] => [
 		status: 'pending',
 		note: 'Lorem',
 		price: 80,
+		tag: 'Camion',
 		userId: users[1].id,
 	},
 	{
@@ -65,6 +67,7 @@ const generateCards = (): ITimeCard[] => [
 		status: 'reject',
 		note: 'Some note',
 		price: 50,
+		tag: 'Fermeture',
 		userId: users[0].id,
 	},
 	{
@@ -74,6 +77,7 @@ const generateCards = (): ITimeCard[] => [
 		duration: '8h',
 		status: 'approve',
 		price: 75,
+		tag: 'Caisse',
 		userId: users[4].id,
 	},
 	{

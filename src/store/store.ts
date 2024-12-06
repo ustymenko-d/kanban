@@ -58,14 +58,6 @@ export const useAppStore = create<AppState>()(
 			}),
 			{
 				name: 'appStateStorage',
-				onRehydrateStorage: () => (state, error) => {
-					if (error) {
-						console.error('Failed to rehydrate Zustand state', error)
-					}
-					if (!state?.cards?.length || !state?.users?.length) {
-						set({ cards: initialData.cards, users: initialData.users })
-					}
-				},
 			}
 		)
 	)

@@ -10,9 +10,19 @@
 html,
 body {
 	min-height: 100lvh;
+	max-height: 100lvh;
 }
 
 body {
 	color: var(--foreground);
 	background: var(--background);
+}
+
+.pageContainer {
+	grid-template-rows: 80px 1fr;
+}
+
+.dashboard {
+	height: calc(100vh - 80px);
+	height: calc(100dvh - 80px);
 }

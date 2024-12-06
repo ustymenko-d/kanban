@@ -1,4 +1,7 @@
 import { FC, RefObject } from 'react'
+import { BiDetail } from 'react-icons/bi'
+import { FaRegEdit } from 'react-icons/fa'
+import { MdDeleteOutline } from 'react-icons/md'
 
 interface ContextMenuProps {
 	contextMenuRef: RefObject<HTMLDivElement>
@@ -13,7 +16,7 @@ const ContextMenu: FC<ContextMenuProps> = ({
 	contextMenuPosition,
 	handleEdit,
 	handleDelete,
-	handleViewDetails, 
+	handleViewDetails,
 }) => {
 	return (
 		<div
@@ -25,15 +28,26 @@ const ContextMenu: FC<ContextMenuProps> = ({
 				left: `${contextMenuPosition.x}px`,
 			}}>
 			<ul className='list-none m-0 p-0'>
-				<li className='px-4 py-2 cursor-pointer hover:bg-slate-300 dark:text-cyan-950'>
-					<button onClick={handleEdit}>edit</button>
+				<li>
+					<button
+						className='py-2 px-4 w-full flex items-center gap-2 cursor-pointer bg-white hover:bg-slate-300 focus-visible:bg-slate-300 active:bg-slate-400'
+						onClick={handleViewDetails}>
+						<BiDetail /> View details
+					</button>
 				</li>
-				<li className='px-4 py-2 cursor-pointer hover:bg-slate-300 dark:text-cyan-950'>
-					<button onClick={handleDelete}>delete</button>
+				<li>
+					<button
+						className='py-2 px-4 w-full flex items-center gap-2 cursor-pointer bg-white hover:bg-slate-300 focus-visible:bg-slate-300 active:bg-slate-400'
+						onClick={handleEdit}>
+						<FaRegEdit /> Edit
+					</button>
 				</li>
-				{/* Add View Details button */}
-				<li className='px-4 py-2 cursor-pointer hover:bg-slate-300 dark:text-cyan-950'>
-					<button onClick={handleViewDetails}>View Details</button>
+				<li>
+					<button
+						className='py-2 px-4 w-full flex items-center gap-2 cursor-pointer text-red-500 bg-white hover:bg-slate-300 focus-visible:bg-slate-300 active:bg-slate-400'
+						onClick={handleDelete}>
+						<MdDeleteOutline /> Delete
+					</button>
 				</li>
 			</ul>
 		</div>

@@ -17,7 +17,7 @@ const KanbanColumn: FC<KanbanColumnProps> = ({ id, cards, onEdit }) => {
 	return (
 		<div
 			ref={setNodeRef}
-			className='min-h-24 p-2 border border-neutral-400 bg-neutral-200'>
+			className='min-h-24 px-1 border-t border-e border-slate-300-400'>
 			{cards.map((card) => (
 				<TimeCard
 					key={card.id}
