@@ -81,14 +81,14 @@ const KanbanBoard: FC = () => {
 			<div className='sticky left-0 py-4 px-2 grid gap-4 xl:grid-cols-3 items-center'>
 				<DecorSelect />
 
-				<div className='order-1 xl:order-0 flex items-center justify-center gap-4'>
+				<div className='order-1  flex items-center justify-center gap-4'>
 					<WeekSelector
 						currentWeekStart={currentWeekStart}
 						setCurrentWeekStart={setCurrentWeekStart}
 					/>
 				</div>
 
-				<div className='flex items-center justify-end gap-3'>
+				<div className='xl:order-2 flex items-center justify-end gap-3'>
 					<DecorativeHeadBlock />
 
 					<button
