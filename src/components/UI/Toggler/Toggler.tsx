@@ -12,7 +12,7 @@ const ToggleSwitch: FC<ToggleSwitchProps> = ({ active, additionalClasses }) => {
 		if (active !== undefined) {
 			setIsEnabled(active)
 		}
-	}, [active]) 
+	}, [active])
 
 	return (
 		<label

@@ -1,5 +1,6 @@
-import Link from 'next/link'
 import { FC } from 'react'
+import Link from 'next/link'
+import ButtonWithIcon from './components/ButtonWithIcon'
 import {
 	FaBell,
 	FaLock,
@@ -31,6 +32,7 @@ const Header: FC = () => {
 						<option>Section 1</option>
 						<option>Section 2</option>
 					</select>
+
 					<button className='flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 active:bg-green-800'>
 						<FaRegCalendarAlt className='text-lg' />
 						Horaires{' '}
@@ -38,26 +40,23 @@ const Header: FC = () => {
 							99+
 						</span>
 					</button>
-
-					<button className='px-3 rounded-lg text-sm font-medium flex gap-2 items-center uppercase hover:bg-gray-200 focus-visible:bg-gray-200 active:bg-gray-300'>
-						<MdOutlineTimer className='pointer-events-none text-green-600' />{' '}
-						Pointages
-					</button>
-					<button className='px-3 rounded-lg text-sm font-medium flex gap-2 items-center uppercase hover:bg-gray-200 focus-visible:bg-gray-200 active:bg-gray-300'>
-						<FaRegUser className='pointer-events-none text-green-600' />
-						Equipe
-						<span className='py-1 px-2 rounded-full text-xs text-white bg-green-500'>
-							99+
-						</span>
-					</button>
-					<button className='px-3 rounded-lg text-sm font-medium flex gap-2 items-center uppercase hover:bg-gray-200 focus-visible:bg-gray-200 active:bg-gray-300'>
-						<FaChartColumn className='pointer-events-none text-green-600' />
-						Rapports
-					</button>
-					<button className='px-3 rounded-lg text-sm font-medium flex gap-2 items-center uppercase hover:bg-gray-200 focus-visible:bg-gray-200 active:bg-gray-300'>
-						<IoDocumentTextSharp className='pointer-events-none text-green-600' />
-						Documents
-					</button>
+					<ButtonWithIcon
+						icon={<MdOutlineTimer className='text-green-600' />}
+						text='Pointages'
+					/>
+					<ButtonWithIcon
+						icon={<FaRegUser className='text-green-600' />}
+						text='Equipe'
+						badge='99+'
+					/>
+					<ButtonWithIcon
+						icon={<FaChartColumn className='text-green-600' />}
+						text='Rapports'
+					/>
+					<ButtonWithIcon
+						icon={<IoDocumentTextSharp className='text-green-600' />}
+						text='Documents'
+					/>
 				</div>
 
 				<div className='flex items-center gap-4'>

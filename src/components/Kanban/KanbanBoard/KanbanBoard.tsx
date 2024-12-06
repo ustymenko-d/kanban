@@ -78,10 +78,10 @@ const KanbanBoard: FC = () => {
 
 	return (
 		<div className='h-full w-full overflow-auto rounded-md shadow-md bg-white'>
-			<div className='sticky left-0 py-4 px-2 grid grid-cols-3 items-center'>
+			<div className='sticky left-0 py-4 px-2 grid gap-4 xl:grid-cols-3 items-center'>
 				<DecorSelect />
 
-				<div className='flex items-center justify-center gap-4'>
+				<div className='order-1 xl:order-0 flex items-center justify-center gap-4'>
 					<WeekSelector
 						currentWeekStart={currentWeekStart}
 						setCurrentWeekStart={setCurrentWeekStart}
@@ -118,7 +118,7 @@ const KanbanBoard: FC = () => {
 									'250px repeat(7, minmax(200px, 1fr)) 250px',
 							}}>
 							<div
-								className={`p-5 border-s-8 border-t border-e border-slate-300 bg-slate-100 ${
+								className={`sticky left-0 p-5 border-s-8 border-t border-e border-slate-300 bg-slate-100 ${
 									index === 0 || index === 1 || index === 3
 										? 'border-s-orange-300'
 										: 'border-s-green-500'

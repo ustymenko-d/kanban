@@ -9,6 +9,7 @@ import { ITimeCard, TCardStatus, TCardTag } from '@/const/const.interfaces'
 import ModalDetails from './components/ModalDetails/ModalDetails'
 import ModalForm from './components/ModalForm/ModalForm'
 import { IoCloseOutline } from 'react-icons/io5'
+import ModalButton from './components/ModalButton/ModalButton'
 
 export interface FormData {
 	userId: string | number
@@ -63,7 +64,7 @@ const Modal: FC = () => {
 
 	const [timeError, setTimeError] = useState<string>('')
 
-	const handleCancel = () => {
+	const handleCancel = (): void => {
 		updateIsCardEditing(false)
 	}
 
@@ -73,7 +74,7 @@ const Modal: FC = () => {
 		handleCancel()
 	}
 
-	const handleEdit = () => {
+	const handleEdit = (): void => {
 		updateIsCardEditing(true)
 	}
 
@@ -179,14 +180,15 @@ const Modal: FC = () => {
 					</div>
 					<div className='absolute bottom-0 w-full p-5 bg-white shadow-2xl'>
 						{editCardData && !isEditing ? (
-							<button
-								className='px-4 py-2 w-full rounded text-white bg-yellow-500 hover:bg-yellow-600 focus-visible:bg-yellow-600 active:bg-yellow-700 duration-200'
-								onClick={handleEdit}>
-								Edit Task
-							</button>
+							<ModalButton
+								text='Edit Task'
+								onClick={handleEdit}
+								bgColor='bg-yellow-500'
+							/>
 						) : (
 							<div className='grid grid-cols-2 gap-4'>
-								<button
+								<ModalButton
+									text='Cancel'
 									onClick={() => {
 										if (editCardData) {
 											handleCancel()
@@ -194,14 +196,13 @@ const Modal: FC = () => {
 											handleClose()
 										}
 									}}
-									className='px-4 py-2 rounded text-white bg-red-500 hover:bg-red-600 focus-visible:bg-red-600 active:bg-red-700 duration-200'>
-									Cancel
-								</button>
-								<button
+									bgColor='bg-red-500'
+								/>
+								<ModalButton
+									text={editCardData ? 'Save Changes' : 'Add Task'}
 									onClick={handleSave}
-									className='px-4 py-2 rounded text-white bg-emerald-500 hover:bg-emerald-600 focus-visible:bg-emerald-600 active:bg-emerald-700 duration-200'>
-									{editCardData ? 'Save Changes' : 'Add Task'}
-								</button>
+									bgColor='bg-emerald-500'
+								/>
 							</div>
 						)}
 					</div>

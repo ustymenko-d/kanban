@@ -2,20 +2,23 @@
 import { ITimeCard, IUser } from '@/const/const.interfaces'
 import { FC, useMemo } from 'react'
 
+interface DetailItemProps {
+	label: string
+	value: string | number | undefined
+}
+
 interface ModalDetailsProps {
 	editCardData: ITimeCard
 	users: IUser[]
 }
 
-const DetailItem: FC<{ label: string; value: string | number | undefined }> = ({
-	label,
-	value,
-}) => (
-	<div className='flex flex-col gap-1'>
-		<strong>{label}:</strong>
-		<p>{value || 'N/A'}</p>
-	</div>
-)
+const DetailItem: FC<DetailItemProps> = ({ label, value }) =>
+	value ? (
+		<div className='flex flex-col gap-1'>
+			<strong>{label}:</strong>
+			<p>{value || 'N/A'}</p>
+		</div>
+	) : null
 
 const ModalDetails: FC<ModalDetailsProps> = ({ editCardData, users }) => {
 	const userName = useMemo(() => {

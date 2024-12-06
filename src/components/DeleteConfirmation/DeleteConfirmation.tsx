@@ -38,6 +38,8 @@ const DeleteConfirmation: FC = ({}) => {
 		}
 	}, [deleteCardData, users])
 
+	if (!deleteModalOpen || !deleteCardData) return null
+
 	return deleteModalOpen ? (
 		<div className='z-40 fixed inset-0 w-screen h-screen flex justify-center items-center'>
 			<div

@@ -51,7 +51,7 @@ export const useAppStore = create<AppState>()(
 						cards: state.cards.filter((card) => card.id !== cardId),
 					})),
 
-				// Edit card data
+				// Edit card
 				editCardData: null,
 				setEditCardData: (card) => set({ editCardData: card }),
 				clearEditCardData: () => set({ editCardData: null }),

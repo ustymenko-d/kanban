@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { format } from 'date-fns'
 import ToggleSwitch from '@/components/UI/Toggler/Toggler'
 import { FaRegUser } from 'react-icons/fa'
@@ -18,35 +18,40 @@ const KanbanHead: FC<KanbanHeadProps> = ({
 	showOnlyUsersWithTasks,
 	setShowOnlyUsersWithTasks,
 }) => {
-	const tasksPerDay = currentWeekDates.map(
-		(date) =>
-			cards.filter((card) => card.date === format(date, 'yyyy-MM-dd')).length
-	)
+	const tasksPerDay = useMemo(() => {
+		return currentWeekDates.map(
+			(date) =>
+				cards.filter((card) => card.date === format(date, 'yyyy-MM-dd')).length
+		)
+	}, [cards, currentWeekDates])
+
+	const gridStyle = {
+		gridTemplateColumns: '250px repeat(7, minmax(200px, 1fr)) 250px',
+	}
 
 	return (
 		<>
 			<div
-				className='grid'
-				style={{
-					gridTemplateColumns: '250px repeat(7, minmax(200px, 1fr)) 250px',
-				}}>
-				<div className='p-4 border-t border-e bg-slate-100 border-slate-300'></div>
+				className='sticky top-0 z-10 grid'
+				style={gridStyle}>
+				<div className='sticky left-0 p-4 border-t border-e bg-slate-100 border-slate-300'></div>
 
-				{dates.map((date) => (
+				{dates.map((date, index) => (
 					<div
 						key={date.toISOString()}
-						className='p-4 font-bold text-center border-t border-e bg-slate-100 border-slate-300 last:rounded-tr-lg hover:bg-slate-300'>
+						className={`p-4 font-bold text-center border-t border-e bg-slate-100 border-slate-300 ${
+							index === dates.length - 1 ? 'rounded-tr-lg' : ''
+						} hover:bg-slate-300`}>
 						<span>{format(date, 'EE')}</span> <span>{format(date, 'dd')}</span>
 					</div>
 				))}
+				<div className='bg-white'></div>
 			</div>
 
 			<div
-				className='grid'
-				style={{
-					gridTemplateColumns: '250px repeat(7, minmax(200px, 1fr)) 250px',
-				}}>
-				<div className='p-2 border-t border-e border-slate-300 bg-emerald-50'>
+				className='sticky z-10 grid'
+				style={{ ...gridStyle, top: 71 }}>
+				<div className='sticky left-0 p-2 border-t border-e border-slate-300 bg-emerald-50'>
 					<label className='flex items-center gap-2 cursor-pointer'>
 						<input
 							type='checkbox'
@@ -73,18 +78,16 @@ const KanbanHead: FC<KanbanHeadProps> = ({
 					</div>
 				))}
 
-				<div className='border-t border-slate-300'></div>
+				<div className='border-t border-slate-300 bg-white'></div>
 			</div>
 
 			<div
-				className='grid'
-				style={{
-					gridTemplateColumns: '250px repeat(7, minmax(200px, 1fr)) 250px',
-				}}>
+				className='sticky z-10 grid'
+				style={{ ...gridStyle, top: 152 }}>
 				{Array.from({ length: 8 }).map((_, index) => (
 					<div
 						key={index}
-						className=' p-2 border-t border-e border-gray-300 flex flex-wrap gap-2 items-center justify-center bg-orange-200 first:justify-start'>
+						className=' p-2 border-t border-e border-gray-300 flex flex-wrap gap-2 items-center justify-center bg-orange-200 first:justify-start first:sticky first:left-0'>
 						{index % 2 === 0 && (
 							<div className='p-1 text-xs rounded-md text-white bg-orange-600 bg-opacity-75 hover:bg-opacity-85'>
 								35h30/45h

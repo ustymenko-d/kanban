@@ -1,6 +1,7 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { IUser } from '@/const/const.interfaces'
 import { FormData } from '../../Modal'
+import DecorativeToggler from './components/DecorativeToggler/DecorativeToggler'
 
 interface ModalFormProps {
 	users: IUser[]
@@ -17,32 +18,9 @@ const ModalForm: FC<ModalFormProps> = ({
 	cardData,
 	setCardData,
 }) => {
-	const [isShiftActive, setIsShiftActive] = useState<boolean>(true)
-
-	const handleToggleActive = (): void => {
-		setIsShiftActive((prev) => !prev)
-	}
-
 	return (
 		<>
-			<div className='grid grid-cols-2 '>
-				<button
-					disabled={isShiftActive}
-					onClick={handleToggleActive}
-					className={`py-2 px-4 rounded-s border ${
-						isShiftActive ? ' bg-slate-200 ' : ' '
-					} border-slate-200 duration-200 `}>
-					Shift
-				</button>
-				<button
-					disabled={!isShiftActive}
-					onClick={handleToggleActive}
-					className={`py-2 px-4 rounded-e border ${
-						!isShiftActive ? ' bg-slate-200 ' : ' '
-					} border-slate-200 duration-200`}>
-					Absence
-				</button>
-			</div>
+			<DecorativeToggler />
 
 			<div className='flex flex-col gap-2'>
 				<label

@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useDndMonitor, useDraggable } from '@dnd-kit/core'
 import { ITimeCard } from '@/const/const.interfaces'
 import { useAppStore } from '@/store/store'
@@ -13,11 +13,11 @@ interface TimeCardProps {
 }
 
 const TimeCard: FC<TimeCardProps> = ({ card, onEdit }) => {
-	const [showContextMenu, setShowContextMenu] = useState<boolean>(false)
-	const [contextMenuPosition, setContextMenuPosition] = useState<{
+	const [contextMenu, setContextMenu] = useState<{
+		show: boolean
 		x: number
 		y: number
-	}>({ x: 0, y: 0 })
+	}>({ show: false, x: 0, y: 0 })
 	const contextMenuRef = useRef<HTMLDivElement>(null)
 	const { toggleDeleteModalOpen, updateIsCardEditing } = useAppStore()
 	const [isDragging, setIsDragging] = useState<boolean>(false)
@@ -35,14 +35,14 @@ const TimeCard: FC<TimeCardProps> = ({ card, onEdit }) => {
 		},
 	})
 
-	const handleContextMenu = (event: React.MouseEvent) => {
+	const handleContextMenu = useCallback((event: React.MouseEvent) => {
 		event.preventDefault()
-		setContextMenuPosition({
+		setContextMenu({
+			show: true,
 			x: event.clientX,
 			y: event.clientY,
 		})
-		setShowContextMenu(true)
-	}
+	}, [])
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -50,34 +50,33 @@ const TimeCard: FC<TimeCardProps> = ({ card, onEdit }) => {
 				contextMenuRef.current &&
 				!contextMenuRef.current.contains(event.target as Node)
 			) {
-				setShowContextMenu(false)
+				setContextMenu((prev) => ({ ...prev, show: false }))
 			}
 		}
 
 		document.addEventListener('click', handleClickOutside)
-
 		return () => {
 			document.removeEventListener('click', handleClickOutside)
 		}
 	}, [])
 
-	const handleViewDetails = () => {
+	const handleViewDetails = useCallback(() => {
 		onEdit(card)
-		setShowContextMenu(false)
-	}
+		setContextMenu((prev) => ({ ...prev, show: false }))
+	}, [card, onEdit])
 
-	const handleEdit = () => {
+	const handleEdit = useCallback(() => {
 		updateIsCardEditing(true)
 		onEdit(card)
-		setShowContextMenu(false)
-	}
+		setContextMenu((prev) => ({ ...prev, show: false }))
+	}, [card, onEdit, updateIsCardEditing])
 
-	const handleDelete = () => {
+	const handleDelete = useCallback(() => {
 		toggleDeleteModalOpen(card)
-		setShowContextMenu(false)
-	}
+		setContextMenu((prev) => ({ ...prev, show: false }))
+	}, [card, toggleDeleteModalOpen])
 
-	const style = {
+	const cardStyle = {
 		transform: transform
 			? `translate3d(${transform.x}px, ${transform.y}px, 0)`
 			: undefined,
@@ -88,7 +87,7 @@ const TimeCard: FC<TimeCardProps> = ({ card, onEdit }) => {
 		<>
 			<div
 				ref={setNodeRef}
-				style={style}
+				style={cardStyle}
 				{...listeners}
 				{...attributes}
 				onContextMenu={handleContextMenu}
@@ -128,10 +127,10 @@ const TimeCard: FC<TimeCardProps> = ({ card, onEdit }) => {
 				)}
 			</div>
 
-			{showContextMenu && (
+			{contextMenu.show && (
 				<ContextMenu
 					contextMenuRef={contextMenuRef}
-					contextMenuPosition={contextMenuPosition}
+					contextMenuPosition={{ x: contextMenu.x, y: contextMenu.y }}
 					handleViewDetails={handleViewDetails}
 					handleEdit={handleEdit}
 					handleDelete={handleDelete}

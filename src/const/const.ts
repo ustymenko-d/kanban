@@ -100,6 +100,36 @@ const generateCards = (): ITimeCard[] => [
 		price: 67,
 		userId: users[2].id,
 	},
+	{
+		id: uuidv4(),
+		time: '07:00-15:00',
+		date: '2024-12-02',
+		duration: '8h',
+		status: 'approve',
+		price: 75,
+		tag: 'Caisse',
+		userId: users[4].id,
+	},
+	{
+		id: uuidv4(),
+		time: '18:00-01:30',
+		date: '2024-12-02',
+		duration: '7h30',
+		status: 'reject',
+		note: 'Lorem ipsu',
+		price: 42,
+		userId: users[3].id,
+	},
+	{
+		id: uuidv4(),
+		time: '08:20-11:00',
+		date: '2024-12-13',
+		duration: '2h40',
+		status: 'reject',
+		note: 'Some note',
+		price: 167,
+		userId: users[3].id,
+	},
 ]
 
 const cards = generateCards()
