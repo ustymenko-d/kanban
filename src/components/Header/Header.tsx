@@ -111,7 +111,7 @@ const Header: FC = () => {
 
 			{breakpoints === 0 && (
 				<div
-					className={`relative z-30 mt-4 ml-auto ${
+					className={`fixed right-8 z-30 mt-4 ml-auto ${
 						isMenuOpen ? 'block' : 'hidden'
 					} p-4 w-fit bg-white shadow-md rounded-lg`}>
 					<div className='grid grid-rows-6 justify-end gap-4'>
@@ -153,7 +153,7 @@ const Header: FC = () => {
 
 			{breakpoints === 1 && (
 				<div
-					className={`relative z-30 mt-4 ml-auto ${
+					className={`fixed right-8 z-30 mt-4 ${
 						isMenuOpen ? 'block' : 'hidden'
 					} p-4 w-fit bg-white shadow-md rounded-lg`}>
 					<div className='flex flex-col items-start gap-4'>

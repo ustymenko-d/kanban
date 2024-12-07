@@ -50,7 +50,7 @@ const KanbanHead: FC<KanbanHeadProps> = ({
 
 			<div
 				className='sticky z-10 grid'
-				style={{ ...gridStyle, top: 71 }}>
+				style={{ ...gridStyle, top: 60.5 }}>
 				<div className='sticky left-0 p-2 border-t border-e border-slate-300 bg-emerald-50'>
 					<label className='flex items-center gap-2 cursor-pointer'>
 						<input
@@ -83,7 +83,7 @@ const KanbanHead: FC<KanbanHeadProps> = ({
 
 			<div
 				className='sticky z-10 grid'
-				style={{ ...gridStyle, top: 152 }}>
+				style={{ ...gridStyle, top: 103.5 }}>
 				{Array.from({ length: 8 }).map((_, index) => (
 					<div
 						key={index}
