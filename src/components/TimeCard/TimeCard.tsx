@@ -4,7 +4,7 @@ import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useDndMonitor, useDraggable } from '@dnd-kit/core'
 import { ITimeCard } from '@/const/const.interfaces'
 import { useAppStore } from '@/store/store'
-import ContextMenu from './components/ContextMenu'
+import ContextMenu from './components/CpntextMenu/ContextMenu'
 import { FaRegClock, FaRegMoneyBillAlt } from 'react-icons/fa'
 
 interface TimeCardProps {

@@ -7,15 +7,16 @@ import { useAppStore } from '@/store/store'
 import KanbanColumn from '../KanbanColumn/KanbanColumn'
 import KanbanHead from '../KanbanHead/KanbanHead'
 import { ITimeCard } from '@/const/const.interfaces'
-import DecorSelect from './components/DecorSelect/DecorSelect'
+import DecorSelect from './components/DecorativeSelect/DecorativeSelect'
 import WeekSelector from './components/WeekSelector/WeekSelector'
 import { FaRegUser } from 'react-icons/fa'
 import DecorativeHeadBlock from './components/DecorativeHeadBlock'
+import { useBreakpoints } from '@/hooks/useBreakpoints'
 
 const KanbanBoard: FC = () => {
 	const { users, cards, editCard, toggleModalOpen, updateIsCardEditing } =
 		useAppStore()
-
+	const screenBreakpoint = useBreakpoints([768])
 	const [isHydrated, setIsHydrated] = useState<boolean>(false)
 	const [currentWeekStart, setCurrentWeekStart] = useState<Date>(
 		startOfWeek(new Date(), { weekStartsOn: 1 })
@@ -78,17 +79,17 @@ const KanbanBoard: FC = () => {
 
 	return (
 		<div className='h-full w-full overflow-auto rounded-md shadow-md bg-white'>
-			<div className='sticky left-0 py-4 px-2 grid gap-4 xl:grid-cols-3 items-center'>
+			<div className='kanbanBoard sticky left-0 py-4 px-2 grid grid-rows-3 gap-4 items-center sm:grid-rows-2 sm:grid-cols-2-auto xl:grid-cols-3 xl:grid-rows-1'>
 				<DecorSelect />
 
-				<div className='order-1  flex items-center justify-center gap-4'>
+				<div className='order-1 flex items-center justify-center gap-4 sm:col-span-full xl:order-none xl:col-auto'>
 					<WeekSelector
 						currentWeekStart={currentWeekStart}
 						setCurrentWeekStart={setCurrentWeekStart}
 					/>
 				</div>
 
-				<div className='xl:order-2 flex items-center justify-end gap-3'>
+				<div className='flex items-center justify-end gap-3'>
 					<DecorativeHeadBlock />
 
 					<button
@@ -101,6 +102,7 @@ const KanbanBoard: FC = () => {
 
 			<div className='w-full grid border-b border-b-slate-300'>
 				<KanbanHead
+					screenBreakpoint={screenBreakpoint}
 					cards={cards}
 					dates={currentWeekDates}
 					currentWeekDates={currentWeekDates}
@@ -114,16 +116,17 @@ const KanbanBoard: FC = () => {
 							key={user.id}
 							className='grid'
 							style={{
-								gridTemplateColumns:
-									'250px repeat(7, minmax(200px, 1fr)) 250px',
+								gridTemplateColumns: !!screenBreakpoint
+									? '250px repeat(7, minmax(200px, 1fr)) 250px'
+									: '170px repeat(7, minmax(200px, 1fr)) 250px',
 							}}>
 							<div
-								className={`sticky left-0 p-5 border-s-8 border-t border-e border-slate-300 bg-slate-100 ${
+								className={`sticky left-0 p-2 border-s-8 border-t border-e border-slate-300 bg-slate-100 ${
 									index === 0 || index === 1 || index === 3
 										? 'border-s-orange-300'
 										: 'border-s-green-500'
-								}`}>
-								<div className='flex items-start gap-4'>
+								} md:p-5`}>
+								<div className='flex flex-wrap flex-col items-start gap-4 md:flex-row'>
 									<div className='aspect-square w-8 border rounded-full flex justify-center items-center'>
 										<FaRegUser />
 									</div>

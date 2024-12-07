@@ -4,6 +4,7 @@ import ToggleSwitch from '@/components/UI/Toggler/Toggler'
 import { FaRegUser } from 'react-icons/fa'
 
 interface KanbanHeadProps {
+	screenBreakpoint: number
 	dates: Date[]
 	currentWeekDates: Date[]
 	showOnlyUsersWithTasks: boolean
@@ -12,6 +13,7 @@ interface KanbanHeadProps {
 }
 
 const KanbanHead: FC<KanbanHeadProps> = ({
+	screenBreakpoint,
 	cards,
 	dates,
 	currentWeekDates,
@@ -26,15 +28,17 @@ const KanbanHead: FC<KanbanHeadProps> = ({
 	}, [cards, currentWeekDates])
 
 	const gridStyle = {
-		gridTemplateColumns: '250px repeat(7, minmax(200px, 1fr)) 250px',
+		gridTemplateColumns: !!screenBreakpoint
+			? '250px repeat(7, minmax(200px, 1fr)) 250px'
+			: '170px repeat(7, minmax(200px, 1fr)) 250px',
 	}
 
 	return (
-		<>
+		<div className='sticky top-0 z-10'>
 			<div
-				className='sticky top-0 z-10 grid'
+				className='z-10 grid'
 				style={gridStyle}>
-				<div className='sticky left-0 p-4 border-t border-e bg-slate-100 border-slate-300'></div>
+				<div className='p-4 border-t border-e bg-slate-100 border-slate-300'></div>
 
 				{dates.map((date, index) => (
 					<div
@@ -49,8 +53,8 @@ const KanbanHead: FC<KanbanHeadProps> = ({
 			</div>
 
 			<div
-				className='sticky z-10 grid'
-				style={{ ...gridStyle, top: 60.5 }}>
+				className='z-10 grid'
+				style={{ ...gridStyle }}>
 				<div className='sticky left-0 p-2 border-t border-e border-slate-300 bg-emerald-50'>
 					<label className='flex items-center gap-2 cursor-pointer'>
 						<input
@@ -82,7 +86,7 @@ const KanbanHead: FC<KanbanHeadProps> = ({
 			</div>
 
 			<div
-				className='sticky z-10 grid'
+				className='grid'
 				style={{ ...gridStyle, top: 103.5 }}>
 				{Array.from({ length: 8 }).map((_, index) => (
 					<div
@@ -105,7 +109,7 @@ const KanbanHead: FC<KanbanHeadProps> = ({
 				))}
 				<div className='p-2 text-center font-bold bg-slate-300'>Compteurs</div>
 			</div>
-		</>
+		</div>
 	)
 }
 
