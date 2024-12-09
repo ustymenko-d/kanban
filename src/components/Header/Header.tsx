@@ -19,7 +19,7 @@ import { MdOutlineTimer } from 'react-icons/md'
 import MobileMenu from './components/MobileMenu/MobileMenu'
 
 const Header: FC = () => {
-	const screenBreakpoint = useBreakpoints([1279, 1439])
+	const screenBreakpoint = useBreakpoints([1279, 1536])
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 
 	const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
